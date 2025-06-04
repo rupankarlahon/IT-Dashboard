@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IT Maintenance Contract</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Montserrat', Arial, sans-serif;
+            background: #232526;
+            color: #f3f6fa;
+            min-height: 100vh;
+        }
+
+        header {
+            width: 100%;
+            background: #23272e;
+            box-shadow: 0 2px 8px 0 #0003;
+            padding: 18px 0 10px 0;
+            margin-bottom: 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        h1 {
+            margin: 0;
+            color: #00bcd4;
+            font-size: 1.7rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 8px #0005;
+            text-align: center;
+        }
+
+        h1 span {
+            color: #e0e0e0;
+            font-size: 1rem;
+            font-weight: 600;
+            display: block;
+            margin-top: 4px;
+            letter-spacing: 0.5px;
+        }
+
+        hr {
+            border: none;
+            border-top: 2px solid #00bcd4;
+            width: 60px;
+            margin: 10px auto 0 auto;
+        }
+
+        .grid-wrap {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 0;
+            padding: 0;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 22px;
+            width: 100%;
+            max-width: 1100px;
+            padding: 28px 2vw 28px 2vw;
+        }
+
+        .card {
+            background: #262b33;
+            border-radius: 16px;
+            box-shadow: 0 2px 8px 0 #0002;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 22px 12px 18px 12px;
+            text-align: center;
+            transition: box-shadow 0.18s, transform 0.18s, background 0.18s;
+            cursor: pointer;
+            border: 1.5px solid #23272e;
+            position: relative;
+            min-height: 170px;
+        }
+
+        .card:hover,
+        .card:focus {
+            box-shadow: 0 8px 24px 0 #00bcd4aa;
+            background: #28313a;
+            transform: translateY(-4px) scale(1.03);
+            border-color: #00bcd4;
+            z-index: 2;
+        }
+
+        .icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .icon img {
+            width: 2.5rem;
+            height: 2.5rem;
+            object-fit: contain;
+            filter: invert(54%) sepia(98%) saturate(747%) hue-rotate(142deg) brightness(97%) contrast(92%);
+            transition: filter 0.18s;
+        }
+
+        .card:hover .icon img {
+            filter: invert(62%) sepia(44%) saturate(747%) hue-rotate(82deg) brightness(97%) contrast(92%);
+        }
+
+        .card-title {
+            font-size: 1.08rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+        }
+
+        .card-desc {
+            font-size: 0.93rem;
+            color: #b2ebf2;
+            opacity: 0.85;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>
+            IT Maintenance Contract (IT-IMMS)
+            <span>with M/s. CIPL<br>05.10.2022 to 04.10.2025</span>
+        </h1>
+        <hr>
+    </header>
+    <div class="grid-wrap">
+        <div class="card-grid">
+            <a href="asset-management.html" class="card" tabindex="0">
+                <div class="icon"><img src="icons/boxes.svg" alt="Asset Management"></div>
+                <div class="card-title">Asset Management</div>
+                <div class="card-desc">Track and manage IT assets</div>
+            </a>
+            <a href="Network management/Server Details of Sivasagar Datacentre.htm" class="card" tabindex="0">
+                <div class="icon"><img src="icons/network.svg" alt="Network Management"></div>
+                <div class="card-title">Network Management</div>
+                <div class="card-desc">Monitor and maintain network</div>
+            </a>
+            <a href="server-management.html" class="card" tabindex="0">
+                <div class="icon"><img src="icons/server.svg" alt="Server Management"></div>
+                <div class="card-title">Server Management</div>
+                <div class="card-desc">Server health & uptime</div>
+            </a>
+            <a href="desktop-management.html" class="card" tabindex="0">
+                <div class="icon"><img src="icons/desktop.svg" alt="Desktop Management"></div>
+                <div class="card-title">Desktop Management</div>
+                <div class="card-desc">User devices & support</div>
+            </a>
+            <a href="service-engineers.html" class="card" tabindex="0">
+                <div class="icon"><img src="icons/user-settings.svg" alt="Service Engineers"></div>
+                <div class="card-title">Service Engineers</div>
+                <div class="card-desc">Team & contact info</div>
+            </a>
+            <a href="petty-works.html" class="card" tabindex="0">
+                <div class="icon"><img src="icons/tools.svg" alt="Petty Works"></div>
+                <div class="card-title">Petty Works</div>
+                <div class="card-desc">Minor IT tasks & fixes</div>
+            </a>
+            <a href="mis.html" class="card" tabindex="0">
+                <div class="icon"><img src="icons/barchart.svg" alt="MIS"></div>
+                <div class="card-title">MIS</div>
+                <div class="card-desc">Reports & analytics</div>
+            </a>
+            <a href="work-orders.html" class="card" tabindex="0">
+                <div class="icon"><img src="icons/file-edit.svg" alt="Work Orders"></div>
+                <div class="card-title">Work Orders</div>
+                <div class="card-desc">Manage work requests</div>
+            </a>
+            <a href="invoices.html" class="card" tabindex="0">
+                <div class="icon"><img src="icons/file-invoice.svg" alt="Invoices"></div>
+                <div class="card-title">Invoices</div>
+                <div class="card-desc">Billing & payments</div>
+            </a>
+            <a href="it-helpdesk.html" class="card" tabindex="0">
+                <div class="icon"><img src="icons/headset.svg" alt="IT Helpdesk"></div>
+                <div class="card-title">IT Helpdesk</div>
+                <div class="card-desc">Support & ticketing</div>
+            </a>
+            <a href="standby-spares.html" class="card" tabindex="0">
+                <div class="icon"><img src="icons/box-open.svg" alt="Standby & Spares"></div>
+                <div class="card-title">Standby & Spares</div>
+                <div class="card-desc">Backup hardware</div>
+            </a>
+            <a href="hardware-repairs.html" class="card" tabindex="0">
+                <div class="icon"><img src="icons/wrench-screwdriver.svg" alt="Hardware Repairs"></div>
+                <div class="card-title">Hardware Repairs</div>
+                <div class="card-desc">Repair status & logs</div>
+            </a>
+            <a href="permanent-replacement.html" class="card" tabindex="0">
+                <div class="icon"><img src="icons/exchange.svg" alt="Permanent Replacement"></div>
+                <div class="card-title">Permanent Replacement</div>
+                <div class="card-desc">Asset replacements</div>
+            </a>
+            <a href="obsolescence.html" class="card" tabindex="0">
+                <div class="icon"><img src="icons/hourglass.svg" alt="Obsolescence"></div>
+                <div class="card-title">Obsolescence</div>
+                <div class="card-desc">End-of-life tracking</div>
+            </a>
+            <a href="backup-recovery.html" class="card" tabindex="0">
+                <div class="icon"><img src="icons/database.svg" alt="Backup & Recovery"></div>
+                <div class="card-title">Backup & Recovery</div>
+                <div class="card-desc">Data safety & restore</div>
+            </a>
+            <a href="it-procurement.html" class="card" tabindex="0">
+                <div class="icon"><img src="icons/shopping-cart.svg" alt="IT Procurement"></div>
+                <div class="card-title">IT Procurement</div>
+                <div class="card-desc">Purchase & supply</div>
+            </a>
+            <a href="licensing.html" class="card" tabindex="0">
+                <div class="icon"><img src="icons/id-badge.svg" alt="Licensing"></div>
+                <div class="card-title">Licensing</div>
+                <div class="card-desc">Software licenses</div>
+            </a>
+            <a href="iso-20000.html" class="card" tabindex="0">
+                <div class="icon"><img src="icons/certificate.svg" alt="ISO 20000"></div>
+                <div class="card-title">ISO 20000</div>
+                <div class="card-desc">Compliance & standards</div>
+            </a>
+        </div>
+    </div>
+</body>
+
+</html>
