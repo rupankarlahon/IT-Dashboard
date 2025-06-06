@@ -1,5 +1,6 @@
 # IT Dashboard
-This contains a dashboard created for an IT company to display various options regarding their work.Created using HTML &CSS
+A dashboard created for an Infocom Services to display various options regarding their work.
+Created using HTML &CSS
 
 How to use:
 
