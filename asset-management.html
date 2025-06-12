@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asset Management</title>
+    <link rel="stylesheet" href="assetstyle.css">
+</head>
+<body>
+    <header>
+        <a href="DEVELOPED.html" class="back-btn">← Back to Portal</a>
+        <div class="header-content">
+            <img src="icons/boxes.svg" alt="Asset Management Icon" class="header-icon">
+            <h1>Asset Management</h1>
+        </div>
+        <hr>
+    </header>
+    <div class="container">
+        <div class="quick-stats">
+            <div class="stat-card">
+                <div class="stat-number" id="totalAssets">0</div>
+                <div class="stat-label">Total Assets</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="availableAssets">0</div>
+                <div class="stat-label">Available</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="inUseAssets">0</div>
+                <div class="stat-label">In Use</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="underMaintenanceAssets">0</div>
+                <div class="stat-label">Under Maintenance</div>
+            </div>
+        </div>
+        <section class="card">
+            <h2>Add New Asset</h2>
+            <form id="assetForm">
+                <div class="form-row">
+                    <input type="text" name="assetId" placeholder="Asset ID" required>
+                    <input type="text" name="assetClass" placeholder="Asset Class" required>
+                </div>
+                <div class="form-row">
+                    <input type="text" name="assetNumber" placeholder="Asset Number (Optional)">
+                    <input type="text" name="inventoryNumber" placeholder="Inventory Number" required>
+                </div>
+                <div class="form-row">
+                    <input type="text" name="makeModel" placeholder="Make/Model" required>
+                    <input type="text" name="serialNumber" placeholder="Serial Number" required>
+                </div>
+                <div class="form-row">
+                    <textarea name="assetDescription" placeholder="Asset Description" rows="3"></textarea>
+                </div>
+                <div class="form-row">
+                    <select name="availability" required>
+                        <option value="">Select Availability</option>
+                        <option value="Available">Available</option>
+                        <option value="In Use">In Use</option>
+                        <option value="Under Maintenance">Under Maintenance</option>
+                        <option value="Retired">Retired</option>
+                    </select>
+                </div>
+                <button type="submit">Add Asset</button>
+            </form>
+        </section>
+        <section class="card">
+            <h2>Asset List</h2>
+            <div class="filters">
+                <select id="availabilityFilter">
+                    <option value="">All Availability Status</option>
+                    <option value="Available">Available</option>
+                    <option value="In Use">In Use</option>
+                    <option value="Under Maintenance">Under Maintenance</option>
+                    <option value="Retired">Retired</option>
+                </select>
+                <input type="text" id="searchInput" placeholder="Search assets...">
+            </div>
+            <table id="assetTable">
+                <thead>
+                    <tr>
+                        <th>Asset ID</th>
+                        <th>Asset Class</th>
+                        <th>Asset Number</th>
+                        <th>Inventory Number</th>
+                        <th>Make/Model</th>
+                        <th>Serial Number</th>
+                        <th>Description</th>
+                        <th>Availability</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </section>
+    </div>
+    <script>
+        let allAssets = [];
+
+        function renderAssets(assets) {
+            const tbody = document.querySelector('#assetTable tbody');
+            tbody.innerHTML = '';
+            assets.forEach(asset => {
+                const availabilityClass = `availability-${asset.availability.toLowerCase().replace(/\s+/g, '-')}`;
+                const row = `<tr>
+                    <td>${asset.assetId}</td>
+                    <td>${asset.assetClass}</td>
+                    <td>${asset.assetNumber}</td>
+                    <td>${asset.inventoryNumber}</td>
+                    <td>${asset.makeModel}</td>
+                    <td>${asset.serialNumber}</td>
+                    <td class="description-cell">${asset.assetDescription || '-'}</td>
+                    <td><span class="status-badge ${availabilityClass}">${asset.availability}</span></td>
+                    <td>
+                        <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 8px;">
+                            <button class="action-btn" style="width: 90px; margin-right: 0;" onclick="editAsset(${asset.id})">Edit</button>
+                            <button class="action-btn" style="width: 90px; margin-right: 0;" onclick="deleteAsset(${asset.id})">Delete</button>
+                        </div>
+                    </td>
+                </tr>`;
+                tbody.innerHTML += row;
+            });
+
+            
+            document.getElementById('totalAssets').textContent = assets.length;
+            document.getElementById('availableAssets').textContent = assets.filter(a => a.availability === 'Available').length;
+            document.getElementById('inUseAssets').textContent = assets.filter(a => a.availability === 'In Use').length;
+            document.getElementById('underMaintenanceAssets').textContent = assets.filter(a => a.availability === 'Under Maintenance').length;
+        }
+
+        function loadAssets() {
+            fetch('http://localhost:5000/assets')
+                .then(res => res.json())
+                .then(data => {
+                    console.log('Loaded assets:', data);
+                    allAssets = data;
+                    renderAssets(allAssets);
+                })
+                .catch(error => {
+                    console.error('Error loading assets:', error);
+                    alert('Failed to load assets. Please refresh the page.');
+                });
+        }
+
+        function filterAssets() {
+            const searchQuery = document.getElementById('searchInput').value.toLowerCase();
+            const availabilityFilter = document.getElementById('availabilityFilter').value;
+
+            const filtered = allAssets.filter(asset => {
+                const matchesSearch = Object.values(asset).some(val => 
+                    String(val).toLowerCase().includes(searchQuery)
+                );
+                const matchesAvailability = !availabilityFilter || asset.availability === availabilityFilter;
+
+                return matchesSearch && matchesAvailability;
+            });
+
+            renderAssets(filtered);
+        }
+
+        
+        document.getElementById('searchInput').addEventListener('input', filterAssets);
+        document.getElementById('availabilityFilter').addEventListener('change', filterAssets);
+
+       
+        document.getElementById('assetForm').onsubmit = function(e) {
+            e.preventDefault();
+            
+            
+            this.querySelectorAll('input, select').forEach(input => {
+                input.style.borderColor = '#3a4a5d';
+            });
+
+            const formData = new FormData(this);
+            const assetData = {};
+            formData.forEach((value, key) => { 
+                if (value.trim() !== '') {  
+                    assetData[key] = value.trim();
+                }
+            });
+
+            console.log('Submitting asset data:', assetData);
+
+            fetch('http://localhost:5000/assets', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(assetData)
+            })
+            .then(response => {
+                console.log('Response status:', response.status);
+                return response.json().then(data => {
+                    if (!response.ok) {
+                        return Promise.reject(data);
+                    }
+                    return data;
+                });
+            })
+            .then(data => {
+                console.log('Asset added successfully:', data);
+                this.reset();
+                loadAssets();
+                alert('Asset added successfully!');
+            })
+            .catch(error => {
+                console.error('Error adding asset:', error);
+                
+                if (error.fields) {
+                    // Highlight missing required fields
+                    error.fields.forEach(field => {
+                        const input = this.querySelector(`[name="${field}"]`);
+                        if (input) {
+                            input.style.borderColor = '#ff3d3d';
+                        }
+                    });
+                    alert(`Please fill in all required fields: ${error.fields.join(', ')}`);
+                } else if (error.field) {
+                    
+                    const input = this.querySelector(`[name="${error.field}"]`);
+                    if (input) {
+                        input.style.borderColor = '#ff3d3d';
+                    }
+                    alert(error.error);
+                } else if (error.details) {
+                   
+                    alert(`Validation error: ${error.details.join('\n')}`);
+                } else {
+                    alert(error.error || 'Failed to add asset. Please try again.');
+                }
+            });
+        };
+
+        function editAsset(id) {
+            const asset = allAssets.find(a => a.id === id);
+            if (!asset) {
+                console.error('Asset not found:', id);
+                return;
+            }
+
+            const form = document.getElementById('assetForm');
+            form.elements['assetId'].value = asset.assetId;
+            form.elements['assetClass'].value = asset.assetClass;
+            form.elements['assetNumber'].value = asset.assetNumber;
+            form.elements['inventoryNumber'].value = asset.inventoryNumber;
+            form.elements['makeModel'].value = asset.makeModel;
+            form.elements['serialNumber'].value = asset.serialNumber;
+            form.elements['assetDescription'].value = asset.assetDescription || '';
+            form.elements['availability'].value = asset.availability;
+
+            form.onsubmit = function(e) {
+                e.preventDefault();
+                const formData = new FormData(this);
+                const assetData = {};
+                formData.forEach((value, key) => {
+                    if (value !== '') {
+                        assetData[key] = value;
+                    }
+                });
+
+                fetch(`http://localhost:5000/assets/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(assetData)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(err => Promise.reject(err));
+                    }
+                    return response.json();
+                })
+                .then(() => {
+                    this.reset();
+                    form.onsubmit = null;
+                    loadAssets();
+                })
+                .catch(error => {
+                    console.error('Error updating asset:', error);
+                    alert('Failed to update asset: ' + (error.message || 'Please try again'));
+                });
+            };
+
+            form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function deleteAsset(id) {
+            if (!confirm('Are you sure you want to delete this asset?')) return;
+            
+            fetch(`http://localhost:5000/assets/${id}`, {
+                method: 'DELETE'
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to delete asset');
+                }
+                return response.json();
+            })
+            .then(() => {
+                loadAssets();
+            })
+            .catch(error => {
+                console.error('Error deleting asset:', error);
+                alert('Failed to delete asset. Please try again.');
+            });
+        }
+
+        
+        loadAssets();
+    </script>
+</body>
+</html>
