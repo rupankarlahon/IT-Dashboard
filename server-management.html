@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Server Management</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #232526;
+            color: #f3f6fa;
+            min-height: 100vh;
+        }
+
+        .server-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 22px;
+            width: 100%;
+            max-width: 1200px;
+            padding: 28px 2vw;
+            margin: 0 auto;
+        }
+
+        .server-card {
+            background: #262b33;
+            border-radius: 16px;
+            box-shadow: 0 2px 8px 0 #0002;
+            padding: 22px;
+            text-decoration: none;
+            transition: box-shadow 0.18s, transform 0.18s, background 0.18s;
+            cursor: pointer;
+            border: 1.5px solid #23272e;
+            position: relative;
+            text-align: center;
+        }
+
+        .server-card:hover {
+            box-shadow: 0 8px 24px 0 #00bcd4aa;
+            background: #28313a;
+            transform: translateY(-4px) scale(1.03);
+            border-color: #00bcd4;
+            z-index: 2;
+        }
+
+        .server-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 0.5px;
+            line-height: 1.4;
+        }
+
+        .server-info {
+            font-size: 0.93rem;
+            color: #b2ebf2;
+            opacity: 0.85;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 10px;
+            letter-spacing: 0.5px;
+        }
+
+        .status-active {
+            background-color: #1a3a32;
+            color: #4caf50;
+            border: 1px solid #4caf5055;
+        }
+
+        .status-inactive {
+            background-color: #3a1a1a;
+            color: #f44336;
+            border: 1px solid #f4433655;
+        }
+
+        .status-maintenance {
+            background-color: #3a2e1a;
+            color: #ff9800;
+            border: 1px solid #ff980055;
+        }
+
+        header {
+            width: 100%;
+            background: #23272e;
+            box-shadow: 0 2px 8px 0 #0003;
+            padding: 18px 0 10px 0;
+            margin-bottom: 0;
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .header-icon {
+            width: 48px;
+            height: 48px;
+            filter: invert(54%) sepia(98%) saturate(747%) hue-rotate(142deg) brightness(97%) contrast(92%);
+        }
+
+        header h1 {
+            margin: 0;
+            color: #00bcd4;
+            font-size: 1.7rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 8px #0005;
+        }
+
+        header hr {
+            border: none;
+            border-top: 2px solid #00bcd4;
+            width: 60px;
+            margin: 10px auto 0 auto;
+        }
+
+        .back-btn {
+            display: inline-block;
+            padding: 8px 16px;
+            color: #00bcd4;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1.5px solid #00bcd4;
+            transition: background 0.2s, color 0.2s;
+            position: absolute;
+            left: 32px;
+            top: 32px;
+        }
+
+        .back-btn:hover {
+            background-color: #00bcd4;
+            color: #fff;
+        }
+
+        @media (max-width: 768px) {
+            .server-grid {
+                grid-template-columns: 1fr;
+                padding: 20px 15px;
+            }
+
+            .back-btn {
+                position: static;
+                margin: 0 0 20px 0;
+                display: inline-block;
+            }
+
+            header {
+                padding-top: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="DEVELOPED.html" class="back-btn">← Back to Portal</a>
+        <div class="header-content">
+            <img src="icons/server.svg" alt="Server Management Icon" class="header-icon">
+            <h1>Server Management</h1>
+        </div>
+        <hr>
+    </header>
+    <div class="grid-wrap">
+        <div class="server-grid" id="serverGrid">
+            <!-- Server cards will be generated here -->
+        </div>
+    </div>
+
+    <script>
+        // Server data - Easy to edit status and information
+        const servers = [
+            {
+                id: 'nas-cluster',
+                name: 'NAS, Cluster Management Server'
+            },
+            {
+                id: 'nas-employee',
+                name: 'NAS, ONGC Employee Storage (NAZ)'
+            },
+            {
+                id: 'nac-clearpass',
+                name: 'NAC ClearPass Onguard'
+            },
+            {
+                id: 'isoc-storage',
+                name: 'ISOC Storage Server'
+            },
+            {
+                id: 'isoc-security',
+                name: 'ISOC Security'
+            },
+            {
+                id: 'isoc-security-nw-decoder',
+                name: 'ISOC Security (N/W Decoder)'
+            },
+            {
+                id: 'isoc-security-nw-concentrator',
+                name: 'ISOC Security (N/W Concentrator)'
+            },
+            {
+                id: 'nas-backup',
+                name: 'NAS Backup Storage (NAZ + SVS)'
+            },
+            {
+                id: 'hyper-v-manager',
+                name: 'Hyper-V Manager'
+            },
+            {
+                id: 'schlumberger-licensing',
+                name: 'Schlumberger Licensing Server'
+            },
+            {
+                id: 'noc-remote-poller',
+                name: 'NOC - Remote Poller Server'
+            },
+            {
+                id: 'noc-netqs',
+                name: 'NOC - NETQS Server'
+            },
+            {
+                id: 'hyper-v-manager-standby',
+                name: 'Hyper-V Manager (StandBy)'
+            },
+            {
+                id: 'disha-paperless-storage',
+                name: 'DISHA - Paperless Storage'
+            },
+            {
+                id: 'disha-paperless-additional',
+                name: 'DISHA - Paperless Additional Server'
+            },
+            {
+                id: 'disha-paperless-main',
+                name: 'DISHA - Paperless Main Server'
+            },
+            {
+                id: 'cyberark',
+                name: 'CyberArk Security'
+            }
+        ];
+
+        // Generate server cards
+        function generateServerCards() {
+            const serverGrid = document.getElementById('serverGrid');
+            serverGrid.innerHTML = servers.map(server => `
+                <a href="server-details.html?server=${server.id}" class="server-card">
+                    <div class="server-name">${server.name}</div>
+                </a>
+            `).join('');
+        }
+
+        // Initialize the page
+        generateServerCards();
+    </script>
+</body>
+</html>
