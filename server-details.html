@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Server Details</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #232526;
+            color: #f3f6fa;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #262b33;
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 2px 8px 0 #0002;
+            margin-top: 28px;
+            border: 1.5px solid #23272e;
+        }
+        .table-container {
+            width: 100%;
+            margin-top: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #28313a;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border: 1px solid #23272e;
+        }
+        th {
+            background-color: #00bcd4;
+            color: #fff;
+            font-weight: 600;
+        }
+        tr:hover {
+            background-color: #2c3742;
+        }
+        td {
+            color: #b2ebf2;
+        }
+        .back-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #00bcd4;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+        .back-button:hover {
+            background: #0097a7;
+        }
+        .server-header td {
+            background-color: #00bcd4;
+            color: white;
+            font-size: 1.1em;
+            padding: 15px;
+        }
+        .server-separator td {
+            height: 30px;
+            background-color: #232526;
+        }
+        td:first-child {
+            font-weight: bold;
+            width: 200px;
+            background-color: #1e2329;
+        }
+        td:last-child {
+            width: calc(100% - 200px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="server-management.html" class="back-button">← Back to Servers</a>
+        <div class="table-container">
+            <div id="serverDetailsBody">
+                
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Application data mapping - each application can have multiple servers
+        const applicationData = {
+            'nas-cluster': {
+                name: 'NAS, Cluster Management Server',
+                servers: [
+                    {
+                        srNo: '1',
+                        rackNo: '1',
+                        location: 'Nazira_IDC',
+                        serverIPPhysical: '10.205.185.229',
+                        serverHostnamePhysical: 'NAZROC01SR007',
+                        os: 'NetApp ONTAP',
+                        serverSerialNo: '042031016498/509',
+                        idracILO: '',
+                        make: 'NETAPP',
+                        model: 'FAS8200',
+                        ram: '',
+                        storage: '',
+                        processors: '',
+                        serverVMIP: '',
+                        serverVMHostname: '',
+                        serverVMOS: '',
+                        vmApplicationDetails: '',
+                        managedBy: 'Central Team, Delhi',
+                        maintenancedBy: 'CIPL MAINTENANCE',
+                        deviceLocation: 'IDC, SERVER RACK 1',
+                        remarks: ''
+                    }
+                ]
+            },
+            'nas-employee': {
+                name: 'NAS, using for ONGC employee storage ( NAZ )',
+                servers: [
+                    {
+                        srNo: '2',
+                        rackNo: '1',
+                        location: 'Nazira_IDC',
+                        serverIPPhysical: '10.205.185.232',
+                        serverHostnamePhysical: 'NAZROC01SR006',
+                        os: 'NetApp ONTAP',
+                        serverSerialNo: '452036000000',
+                        idracILO: '',
+                        make: '',
+                        model: '',
+                        ram: '',
+                        storage: '',
+                        processors: '',
+                        serverVMIP: '',
+                        serverVMHostname: '',
+                        serverVMOS: '',
+                        vmApplicationDetails: '',
+                        managedBy: 'Central Team, Delhi',
+                        maintenancedBy: 'CIPL MAINTENANCE',
+                        deviceLocation: 'IDC, SERVER RACK 1',
+                        remarks: ''
+                    },
+                    {
+                        srNo: '3',
+                        rackNo: '1',
+                        location: 'Nazira_IDC',
+                        serverIPPhysical: '10.205.185.230',
+                        serverHostnamePhysical: 'NAZROC01SR005',
+                        os: 'NetApp ONTAP',
+                        serverSerialNo: '45203600000',
+                        idracILO: '',
+                        make: '',
+                        model: '',
+                        ram: '',
+                        storage: '',
+                        processors: '',
+                        serverVMIP: '',
+                        serverVMHostname: '',
+                        serverVMOS: '',
+                        vmApplicationDetails: '',
+                        managedBy: 'Central Team, Delhi',
+                        maintenancedBy: 'CIPL MAINTENANCE',
+                        deviceLocation: 'IDC, SERVER RACK 1',
+                        remarks: ''
+                    }
+                ]
+            },
+            'nac-clearpass': {
+                name: 'NAC, ClearPass Onguard',
+                servers: [
+                    {
+                        srNo: '4',
+                        rackNo: '1',
+                        location: 'Nazira_IDC',
+                        serverIPPhysical: '10.205.185.201',
+                        serverHostnamePhysical: 'NAZROC01SR008',
+                        os: 'RED HAT ENTERPRISE LINUX 7',
+                        serverSerialNo: '2M205300BQ',
+                        idracILO: '',
+                        make: 'HP ARUBA',
+                        model: 'Prolient DL 20 Gen 10',
+                        ram: '',
+                        storage: '',
+                        processors: '',
+                        serverVMIP: '',
+                        serverVMHostname: '',
+                        serverVMOS: '',
+                        vmApplicationDetails: '',
+                        managedBy: 'Central Team, Delhi',
+                        maintenancedBy: 'NOT IN CIPL MAINTENANCE',
+                        deviceLocation: 'IDC, SERVER RACK 1',
+                        remarks: ''
+                    }
+                ]
+            },
+            'isoc-storage': {
+                name: 'NAC, ClearPass Onguard',
+                servers: [
+                    {
+                        srNo: '5',
+                        rackNo: '1',
+                        location: 'Nazira_IDC',
+                        serverIPPhysical: '10.205.185.145/146',
+                        serverHostnamePhysical: 'NAZIDC01SR040',
+                        os: 'ISOC STORAGE ',
+                        serverSerialNo: '6XTBJ23',
+                        idracILO: '',
+                        make: 'Dell EMC',
+                        model: 'ME 4012',
+                        ram: '',
+                        storage: '10*4TB',
+                        processors: 'Intel® 2-core, 2.2GHz',
+                        serverVMIP: '',
+                        serverVMHostname: '',
+                        serverVMOS: '',
+                        vmApplicationDetails: '',
+                        managedBy: 'Central Team, Delhi',
+                        maintenancedBy: 'NOT IN CIPL MAINTENANCE',
+                        deviceLocation: 'IDC, SERVER RACK 1',
+                        remarks: ''
+                    }
+                ]
+            },
+            'isoc-security': {
+                name: 'ISOC Security',
+                servers: [
+                    {
+                        srNo: '6',
+                        rackNo: '1',
+                        location: 'Nazira_IDC',
+                        serverIPPhysical: '10.205.185.144, 10.205.185.153',
+                        serverHostnamePhysical: 'NAZROB301VLC02',
+                        os: 'VMWARE 6.7 esXI',
+                        serverSerialNo: 'BJMCJ13',
+                        idracILO: '',
+                        make: 'Dell EMC',
+                        model: 'R740',
+                        ram: '32*2 GB',
+                        storage: 'SAS HOT SWAPABLE',
+                        processors: ' Intel Xeon Silver 4214 2.2GHz',
+                        serverVMIP: '',
+                        serverVMHostname: '',
+                        serverVMOS: '',
+                        vmApplicationDetails: '',
+                        managedBy: 'Security Team, Delhi',
+                        maintenancedBy: 'NOT IN CIPL MAINTENANCE',
+                        deviceLocation: 'IDC, SERVER RACK 1',
+                        remarks: ''
+                    },
+                    {
+                        srNo: '7',
+                        rackNo: '1',
+                        location: 'Nazira_IDC',
+                        serverIPPhysical: '10.205.185.142, 10.205.185.152',
+                        serverHostnamePhysical: 'NAZROB301VLC01',
+                        os: 'VMWARE 6.7 esXI',
+                        serverSerialNo: '4JMCJ13',
+                        idracILO: '',
+                        make: 'Dell EMC',
+                        model: 'R740',
+                        ram: '32*2 GB',
+                        storage: 'SAS HOT SWAPABLE',
+                        processors: ' Intel Xeon Silver 4214 2.2GHz',
+                        serverVMIP: '',
+                        serverVMHostname: '',
+                        serverVMOS: '',
+                        vmApplicationDetails: '',
+                        managedBy: 'Security Team, Delhi',
+                        maintenancedBy: 'NOT IN CIPL MAINTENANCE',
+                        deviceLocation: 'IDC, SERVER RACK 1',
+                        remarks: ''
+                    }
+
+                ]
+            },
+            'isoc-security-nw-decoder': {
+                name: 'ISOC Security(N/W Decoder)',
+                servers: [
+                    {
+                        srNo: '8',
+                        rackNo: '1',
+                        location: 'Nazira_IDC',
+                        serverIPPhysical: '10.205.185.147, (Console - 10.205.185.148 NP)',
+                        serverHostnamePhysical: 'NAZROB301DEC01',
+                        os: 'RSA_NW S6 SED NTWK DECODER',
+                        serverSerialNo: '3XZCJ13',
+                        idracILO: '',
+                        make: 'RSA',
+                        model: 'N/W S6 SED N/W Decoder (E39S)',
+                        ram: '128 GB',
+                        storage: ' HDD Serial Attached SCSI 3 1+2TB',
+                        processors: 'INTEL Xeon Gold 6132 3.2 GHZ',
+                        serverVMIP: '',
+                        serverVMHostname: '',
+                        serverVMOS: '',
+                        vmApplicationDetails: '',
+                        managedBy: 'Security Team, Delhi',
+                        maintenancedBy: 'NOT IN CIPL MAINTENANCE',
+                        deviceLocation: 'IDC, SERVER RACK 1',
+                        remarks: ''
+                    }
+                ]
+            },
+            'isoc-security-nw-concentrator': {
+                name: 'ISOC Security(N/W Concentrator)',
+                servers: [
+                    {
+                        srNo: '9',
+                        rackNo: '1',
+                        location: 'Nazira_IDC',
+                        serverIPPhysical: '10.205.185.149,  (Console-10.205.185.150 NP)',
+                        serverHostnamePhysical: 'NAZROB301CON01',
+                        os: 'RSA_NW S6 SED NTWK CONCENTRATOR',
+                        serverSerialNo: 'JWZCJ13',
+                        idracILO: '',
+                        make: 'RSA',
+                        model: 'N/W S6 SED N/W Concentrator(E39S)',
+                        ram: '128 GB',
+                        storage: '  Hot-swap Serial Attached SCSI 2+8TB',
+                        processors: 'INTEL Xeon Gold 6132 3.2 GHZ',
+                        serverVMIP: '',
+                        serverVMHostname: '',
+                        serverVMOS: '',
+                        vmApplicationDetails: '',
+                        managedBy: 'Security Team, Delhi',
+                        maintenancedBy: 'NOT IN CIPL MAINTENANCE',
+                        deviceLocation: 'IDC, SERVER RACK 1',
+                        remarks: ''
+                    }
+                ]
+            },
+            'nas-backup': {
+                name: 'NAS-Backup Storage(Naz+Svs)',
+                servers: [
+                    {
+                        srNo: '10',
+                        rackNo: '1',
+                        location: 'Nazira_IDC',
+                        serverIPPhysical: '10.205.185.14',
+                        serverHostnamePhysical: 'ONGC_NAZIRA_RC',
+                        os: 'NetApp ONTAP',
+                        serverSerialNo: '952312002694/952312002014',
+                        idracILO: '',
+                        make: 'NetApp',
+                        model: 'FAS 2720',
+                        ram: '',
+                        storage: '  ',
+                        processors: '',
+                        serverVMIP: '',
+                        serverVMHostname: '',
+                        serverVMOS: '',
+                        vmApplicationDetails: '',
+                        managedBy: 'Central Team, Delhi',
+                        maintenancedBy: 'NOT IN CIPL MAINTENANCE',
+                        deviceLocation: 'IDC, SERVER RACK 1',
+                        remarks: ''
+                    }
+                ]
+            },
+            'hyper-v-manager': {
+                name: 'Hyper-V Manager',
+                servers: [
+                    {
+                        srNo: '11',
+                        rackNo: '1',
+                        location: 'Nazira_IDC',
+                        serverIPPhysical: '10.205.185.203',
+                        serverHostnamePhysical: 'NAZIDC01SR030',
+                        os: 'Windows Server 2022',
+                        serverSerialNo: '4J0Q7W3',
+                        idracILO: ' 10.205.181.195',
+                        make: 'DELL EMC',
+                        model: 'PowerEdge R650xs',
+                        ram: 'DDR4 SDRAM WITH ECC 2 * 128GB',
+                        storage: '5 * 1 TB (RAID 5),2 * 600 GB for OS (RAID 1)',
+                        processors: 'Intel(R) Xeon(R) Gold 5318Y CPU @ 2.10GHz   2.10 GHz  (2 processors),48 CORES',
+                        serverVMIP: '10.205.185.209|10.205.185.210',
+                        serverVMHostname: 'NAZIDC01SR036|NAZIDC01SR037',
+                        serverVMOS: 'Windows Server 2022|Windows Server 2022',
+                        vmApplicationDetails: 'AV Apex One Database (VM)|AV Apex One Application(VM)',
+                        managedBy: 'AV Team, Delhi|AV Team, Delhi',
+                        maintenancedBy: 'CIPL MAINTENANCE|CIPL MAINTENANCE',
+                        deviceLocation: 'IDC, SERVER RACK 1|IDC, SERVER RACK 1',
+                        remarks: ''
+                    },
+                    {
+                        srNo: '12',
+                        rackNo: '1',
+                        location: 'Nazira_IDC',
+                        serverIPPhysical: '10.205.185.204',
+                        serverHostnamePhysical: 'NAZIDC01SR031',
+                        os: 'Windows Server 2022',
+                        serverSerialNo: '5J0Q7W3',
+                        idracILO: ' 10.205.181.196',
+                        make: 'DELL EMC',
+                        model: 'PowerEdge R650xs',
+                        ram: 'DDR4 SDRAM WITH ECC 2 * 128GB',
+                        storage: '5 * 1 TB (RAID 5),2 * 600 GB for OS (RAID 1)',
+                        processors: 'Intel(R) Xeon(R) Gold 5318Y CPU @ 2.10GHz   2.10 GHz  (2 processors),48 CORES',
+                        serverVMIP: '10.205.185.128',
+                        serverVMHostname: 'NAZIDC01SR039',
+                        serverVMOS: 'Windows Server 2019 Std',
+                        vmApplicationDetails: 'BPM Agent(VM)',
+                        managedBy: 'Central Team, Delhi',
+                        maintenancedBy: 'CIPL MAINTENANCE',
+                        deviceLocation: 'IDC, SERVER RACK 1',
+                        remarks: ''
+                    },
+                    {
+                        srNo: '13',
+                        rackNo: '1',
+                        location: 'Nazira_IDC',
+                        serverIPPhysical: '10.205.185.205',
+                        serverHostnamePhysical: 'NAZIDC01SR032',
+                        os: 'Windows Server 2022',
+                        serverSerialNo: '7J0Q7W3',
+                        idracILO: ' 10.205.181.197',
+                        make: 'DELL EMC',
+                        model: 'PowerEdge R650xs',
+                        ram: 'DDR4 SDRAM WITH ECC 2 * 128GB',
+                        storage: '5 * 1 TB (RAID 5),2 * 600 GB for OS (RAID 1)',
+                        processors: 'Intel(R) Xeon(R) Gold 5318Y CPU @ 2.10GHz   2.10 GHz  (2 processors),48 CORES',
+                        serverVMIP: '10.205.185.136|10.205.185.116',
+                        serverVMHostname: 'N/A|ONGC-FTP',
+                        serverVMOS: 'UBUNTU|Windowos 10 Pro',
+                        vmApplicationDetails: 'NZRWEBCAST(VM)|FTP(VM)',
+                        managedBy: 'Infocom, Nazira|CIPL Team. Nazira',
+                        maintenancedBy: 'CIPL MAINTENANCE',
+                        deviceLocation: 'IDC, SERVER RACK 1',
+                        remarks: ''
+                    },
+                    {
+                        srNo: '14',
+                        rackNo: '1',
+                        location: 'Nazira_IDC',
+                        serverIPPhysical: '10.205.185.206',
+                        serverHostnamePhysical: 'NAZIDC01SR033',
+                        os: 'Windows Server 2022',
+                        serverSerialNo: '6J0Q7W3',
+                        idracILO: '10.205.181.198',
+                        make: 'DELL EMC',
+                        model: 'PowerEdge R650xs',
+                        ram: ' DDR4 SDRAM WITH ECC 2 * 128GB',
+                        storage: '5 * 1 TB (RAID 5),,2 * 600 GB for OS (RAID 1)',
+                        processors: 'Intel(R) Xeon(R) Gold 5318Y CPU @ 2.10GHz   2.10 GHz  (2 processors),48 CORES',
+                        serverVMIP: '10./205.181.247|10.205.181.251',
+                        serverVMHostname: 'NETQS|NAZPROXY02',
+                        serverVMOS: 'Windows 2016|CentOS 7.5',
+                        vmApplicationDetails: 'NOC NETQS Harvester (VM)|Proxy_251(VM)',
+                        managedBy: 'NOC Team, Delhi|Central Team, Delhi',
+                        maintenancedBy: 'CIPL MAINTENANCE',
+                        deviceLocation: 'IDC, SERVER RACK 1',
+                        remarks: ''
+                    },
+                    {
+                        srNo: '15',
+                        rackNo: '2',
+                        location: 'Nazira_IDC',
+                        serverIPPhysical: '10.205.185.223',
+                        serverHostnamePhysical: 'NZRROB1HVM02',
+                        os: 'Windows Server 2019 std',
+                        serverSerialNo: 'GNW9053',
+                        idracILO: '10.205.185.220',
+                        make: 'DELL',
+                        model: 'POWEREDGE R440',
+                        ram: '128GB',
+                        storage: '1.2TB. (SAS 12GB 10K) X 4Nos',
+                        processors: 'Intel Xeon Silver4214 CPU @2.20GHz',
+                        serverVMIP: '10.205.185.251|10.205.185.227',
+                        serverVMHostname: 'NZRROB01ADC02|NZRROB01WUS01',
+                        serverVMOS: 'Windows Server 2019 Std|Windows Server 2019 Std',
+                        vmApplicationDetails: 'Active Directory(VM)|WSUS(VM)',
+                        managedBy: 'Central Team, Delhi & Nazira|CIPL Team,Nazira',
+                        maintenancedBy: 'CIPL MAINTENANCE',
+                        deviceLocation: 'IDC, SERVER RACK 2',
+                        remarks: ''
+                    },
+                    {
+                        srNo: '16',
+                        rackNo: '2',
+                        location: 'Nazira_IDC',
+                        serverIPPhysical: '10.205.185.222',
+                        serverHostnamePhysical: 'NZRROB1HVM01',
+                        os: 'Windows Server 2019 std',
+                        serverSerialNo: 'HNW9053',
+                        idracILO: '10.205.185.201',
+                        make: 'DELL',
+                        model: 'POWEREDGE R440',
+                        ram: '128GB',
+                        storage: '1.2TB. (SAS 12GB 10K) X 4Nos',
+                        processors: 'Intel Xeon Silver4214 CPU @2.20GHz',
+                        serverVMIP: '10.205.185.250|10.205.185.252',
+                        serverVMHostname: 'NZRROB01ADC01|NZRROB01DHCP',
+                        serverVMOS: 'Windows Server 2019 Std|Windows Server 2019 Std',
+                        vmApplicationDetails: 'Active Directory(VM)|DHCP(VM)',
+                        managedBy: 'Central Team, Delhi & Nazira|CIPL Team. Nazira',
+                        maintenancedBy: 'CIPL MAINTENANCE',
+                        deviceLocation: 'IDC, SERVER RACK 2',
+                        remarks: ''
+                    },
+                    {
+                        srNo: '17',
+                        rackNo: '4',
+                        location: 'Nazira_IDC',
+                        serverIPPhysical: '10.205.181.216',
+                        serverHostnamePhysical: 'NAZIDC01SR034',
+                        os: 'Windows Server 2022',
+                        serverSerialNo: '3JBJ7W3',
+                        idracILO: '',
+                        make: 'DELL',
+                        model: 'PowerEdge R650xs',
+                        ram: '  INTEL DDR4 SDRAM WITH ECC 1 * 128GB',
+                        storage: '5 * 1 TB (RAID 5),2 * 600 GB for OS (RAID 1)',
+                        processors: 'Intel(R) Xeon(R) Silver  4310 CPU @ 2.10GHz   2.10 GHz  (2 processors), 24 Cores',
+                        serverVMIP: '10.205.181.243|10.205.181.252|nazirameet',
+                        serverVMHostname: 'NAZROC01SR026|NAZPROXY03|N/A',
+                        serverVMOS: 'Windows Server 2019 Std|CentOS 7|N/A',
+                        vmApplicationDetails: 'Assam Asset Intranet Portal (VM)|Proxy_252 (VM)|NAZIRAMEET(VM)',
+                        managedBy: 'Infocom, Nazira|Central Team, Delhi|CIPL Team. Nazira',
+                        maintenancedBy: 'CIPL MAINTENANCE',
+                        deviceLocation: 'IDC, SERVER RACK 4',
+                        remarks: ''
+                    },
+                    {
+                        srNo: '18',
+                        rackNo: '4',
+                        location: 'Nazira_IDC',
+                        serverIPPhysical: '10.205.181.217',
+                        serverHostnamePhysical: 'NAZIDC01SR035',
+                        os: 'Windows Server 2022',
+                        serverSerialNo: '2JBJ7W3',
+                        idracILO: '',
+                        make: 'DELL EMC',
+                        model: 'PowerEdge R650xs',
+                        ram: '  INTEL DDR4 SDRAM WITH ECC 1 * 128GB',
+                        storage: '5 * 1 TB (RAID 5),2 * 600 GB for OS (RAID 1',
+                        processors: 'Intel(R) Xeon(R) Silver  4310 CPU @ 2.10GHz   2.10 GHz  (2 processors), 24 Cores',
+                        serverVMIP: '10.205.181.215|10.205.181.168|10.205.181.212|N/A|10.205.181.250|10.205.181.244',
+                        serverVMHostname: 'openmanage-enterprise4|NMSLeafcollector|MRTG|NAZGIOS|NAZPROXY01|NAZ-DM-01|',
+                        serverVMOS: 'CentOS 7.5|Windows Server 2019 Std|Windows Server 2016|UBUNTU|CentOS 7.5|Windows Server 2019 Std',
+                        vmApplicationDetails: 'Dell OME (VM)|Leaf Collector (VM)|MRTG(VM)|NAGIOS(VM)|Proxy_250 (VM)|ZENWORK(VM)',
+                        managedBy: 'CIPL/ Infocom. Team, Nazira|Central Team, Delhi|Infocom, Nazira|Infocom, Nazira|Central Team, Delhi|Central Team, Delhi',
+                        maintenancedBy: 'CIPL MAINTENANCE',
+                        deviceLocation: 'IDC, SERVER RACK 4',
+                        remarks: ''
+                    }
+                ]
+            },
+            'schlumberger-licensing': {
+                name: 'Schlumberger Licensing Server',
+                servers: [
+                    {
+                        srNo: '19',
+                        rackNo: '2',
+                        location: 'Nazira_IDC',
+                        serverIPPhysical: '10.205.181.199',
+                        serverHostnamePhysical: 'NAZIDC01SR016',
+                        os: 'Windows Server 2019 std',
+                        serverSerialNo: 'SGH031XVDR',
+                        idracILO: '',
+                        make: 'HP',
+                        model: 'PROLIANT DL380 G6',
+                        ram: '8 GB',
+                        storage: '146GB *4 SCSI SAS HOT SWAPABLE',
+                        processors: 'Intel(R) Xeon(R) CPU  E5504  @ 2.00GHz',
+                        serverVMIP: '',
+                        serverVMHostname: '',
+                        serverVMOS: '',
+                        vmApplicationDetails: '',
+                        managedBy: 'INFOCOM. Nazira',
+                        maintenancedBy: 'CIPL MAINTENANCE',
+                        deviceLocation: 'IDC, SERVER RACK 2',
+                        remarks: 'Schlumberger Licencing Server, Managed by SST Dept ROB-1. CIPL don’t take backup of this S/W. Without proper Mail from SST Dept , CIPL cannot perform  restart or any modification in this Server. Contact Person: RAMESH BABU, Mobile: 7710091714, ROB-1 / SST'
+                    }
+                ]
+            },
+            'noc-remote-poller': {
+                name: 'NOC - Remote Poller Server',
+                servers: [
+                    {
+                        srNo: '20',
+                        rackNo: '2',
+                        location: 'Nazira_IDC',
+                        serverIPPhysical: '10.205.181.239',
+                        serverHostnamePhysical: 'NAZ-RP-01',
+                        os: 'WINDOWS SERVER 2016 ENTERPRISE',
+                        serverSerialNo: 'SGH032X295',
+                        idracILO: '',
+                        make: 'HP',
+                        model: 'PROLIANT DL380 G6',
+                        ram: '4 GB',
+                        storage: '300GB SCSI SAS HOT SWAPABLE',
+                        processors: 'Intel® Xeon®  CPU E5504 @2.00 GHz',
+                        serverVMIP: '',
+                        serverVMHostname: '',
+                        serverVMOS: '',
+                        vmApplicationDetails: '',
+                        managedBy: 'NOC Team, Delhi',
+                        maintenancedBy: 'CIPL MAINTENANCE',
+                        deviceLocation: 'IDC, SERVER RACK 2',
+                        remarks: ''
+                    }
+                ]
+            },
+            'noc-netqs': {
+                name: 'NOC - NETQS Server',
+                servers: [
+                    {
+                        srNo: '21',
+                        rackNo: '2',
+                        location: 'Nazira_IDC',
+                        serverIPPhysical: '10.205.181.246',
+                        serverHostnamePhysical: 'NAZ-SIM-02',
+                        os: 'RED HAT ENTERPRISE LINUX 7',
+                        serverSerialNo: 'SGH032X294',
+                        idracILO: '',
+                        make: 'HP',
+                        model: 'PROLIANT DL380 G6',
+                        ram: '4 GB',
+                        storage: '146GB SCSI SAS HOT SWAPABLE',
+                        processors: 'Intel(R) Xeon(R) CPU  E5504  @ 2.00GHz',
+                        serverVMIP: '',
+                        serverVMHostname: '',
+                        serverVMOS: '',
+                        vmApplicationDetails: '',
+                        managedBy: 'Security Team, Delhi',
+                        maintenancedBy: 'NOT IN CIPL MAINTENANCE',
+                        deviceLocation: 'IDC, SERVER RACK 2',
+                        remarks: ''
+                    }
+                ]
+            },
+            'hyper-v-manager-standby': {
+                name: 'Hyper-V-Manager-Standby',
+                servers: [
+                    {
+                        srNo: '22',
+                        rackNo: '2',
+                        location: 'Nazira_IDC',
+                        serverIPPhysical: '10.205.181.134',
+                        serverHostnamePhysical: 'NAZROC01SR025',
+                        os: 'Windows Server 2016',
+                        serverSerialNo: '4QSMB23',
+                        idracILO: '',
+                        make: 'DELL',
+                        model: 'POWEREDGE R540',
+                        ram: '32GB*4',
+                        storage: 'Hot Plug  SAS 7TB',
+                        processors: 'Intel Xeon Silver 4208 2.1GHz',
+                        serverVMIP: '',
+                        serverVMHostname: '',
+                        serverVMOS: '',
+                        vmApplicationDetails: '',
+                        managedBy: 'CIPL Team. Nazira',
+                        maintenancedBy: 'CIPL MAINTENANCE',
+                        deviceLocation: 'IDC, SERVER RACK 2',
+                        remarks: ''
+                    },
+                    {
+                        srNo: '23',
+                        rackNo: '2',
+                        location: 'Nazira_IDC',
+                        serverIPPhysical: '10.205.181.210',
+                        serverHostnamePhysical: 'NAZROC01SR038',
+                        os: 'Windows Server 2019',
+                        serverSerialNo: 'CN76520GWZ',
+                        idracILO: '',
+                        make: 'HP',
+                        model: ' Proliant DL 380 G9',
+                        ram: '64 GB',
+                        storage: 'Hot Plug SFF SAS',
+                        processors: 'Intel(R) Xeon(R) CPU E5-2620 v3 @ 2.40GHz',
+                        serverVMIP: 'standby',
+                        serverVMHostname: 'standby',
+                        serverVMOS: 'standby',
+                        vmApplicationDetails: 'standby',
+                        managedBy: 'CIPL Team,Nazira',
+                        maintenancedBy: 'CIPL MAINTENANCE',
+                        deviceLocation: 'IDC, SERVER RACK 3',
+                        remarks: ''
+                    }
+                ]
+            },
+            'disha-paperless-storage': {
+                name: 'DISHA - Paperless Storage',
+                servers: [
+                    {
+                        srNo: '24',
+                        rackNo: '3',
+                        location: 'Nazira_IDC',
+                        serverIPPhysical: '10.205.181.191, 10.205.181.192, 10.205.181.194',
+                        serverHostnamePhysical: '"NAZROC01SR021',
+                        os: 'NetApp ONTAP',
+                        serverSerialNo: 'SHJSG1721000070',
+                        idracILO: '',
+                        make: 'NETAPP',
+                        model: 'FAS 2520',
+                        ram: '',
+                        storage: '',
+                        processors: '',
+                        serverVMIP: '',
+                        serverVMHostname: '',
+                        serverVMOS: '',
+                        vmApplicationDetails: '',
+                        managedBy: 'Central Team, Delhi',
+                        maintenancedBy: 'CIPL MAINTENANCE',
+                        deviceLocation: 'IDC, SERVER RACK 3',
+                        remarks: ''
+                    }
+                ]
+            },
+            'disha-paperless-additional': {
+                name: 'Disha Paperless Additional Server',
+                servers: [
+                    {
+                        srNo: '25',
+                        rackNo: '3',
+                        location: 'Nazira_IDC',
+                        serverIPPhysical: '10.205.181.188-190',
+                        serverHostnamePhysical: 'NAZROC01SR020',
+                        os: 'RED HAT ENTERPRISE LINUX 7',
+                        serverSerialNo: 'SGH718TS99',
+                        idracILO: '',
+                        make: 'HP',
+                        model: 'Proliant DL 560 G9',
+                        ram: '256 GB',
+                        storage: ':600*4 GB',
+                        processors: 'Intel(R) Xeon(R) CPU E5-4610 v4 @ 1.80GHz',
+                        serverVMIP: '',
+                        serverVMHostname: '',
+                        serverVMOS: '',
+                        vmApplicationDetails: '',
+                        managedBy: 'Central Team, Delhi',
+                        maintenancedBy: 'CIPL MAINTENANCE',
+                        deviceLocation: 'IDC, SERVER RACK 3',
+                        remarks: ''
+                    }
+                ]
+            },
+            'disha-paperless-main': {
+                name: 'Disha Paperless Main Server',
+                servers: [
+                    {
+                        srNo: '26',
+                        rackNo: '3',
+                        location: 'Nazira_IDC',
+                        serverIPPhysical: '10.205.181.184',
+                        serverHostnamePhysical: 'NAZROC01SR019',
+                        os: 'RED HAT ENTERPRISE LINUX 7',
+                        serverSerialNo: 'CN77010F4M',
+                        idracILO: '',
+                        make: 'HP',
+                        model: 'Proliant DL 380 G9',
+                        ram: '64 GB',
+                        storage: '600*3, 900*4 GB',
+                        processors: 'Intel(R) Xeon(R) CPU E5-2620 v3 @ 2.40GHz',
+                        serverVMIP: '',
+                        serverVMHostname: '',
+                        serverVMOS: '',
+                        vmApplicationDetails: '',
+                        managedBy: 'Central Team, Delhi',
+                        maintenancedBy: 'CIPL MAINTENANCE',
+                        deviceLocation: 'IDC, SERVER RACK 3',
+                        remarks: ''
+                    }
+                ]
+            },
+            'cyberark': {
+                name: 'CyberArk Security',
+                servers: [
+                    {
+                        srNo: '27',
+                        rackNo: '3',
+                        location: 'Nazira_IDC',
+                        serverIPPhysical: '10.205.181.223',
+                        serverHostnamePhysical: ' NAZ-PSM',
+                        os: 'Windows Server 2019 Std',
+                        serverSerialNo: '85FDHJ2',
+                        idracILO: '10.205.181.224',
+                        make: 'Dell',
+                        model: 'PowerEdge R630',
+                        ram: '64 GB',
+                        storage: '7TB',
+                        processors: 'INTEL(R) XENON(R) CPU E5-2620 V4@2.10 GHz @2.10 GHz (2 Processors) ',
+                        serverVMIP: '',
+                        serverVMHostname: '',
+                        serverVMOS: '',
+                        vmApplicationDetails: '',
+                        managedBy: 'Security Team, Delhi',
+                        maintenancedBy: 'NOT IN CIPL MAINTENANCE',
+                        deviceLocation: 'IDC, SERVER RACK 3',
+                        remarks: ''
+                    },
+                     {
+                        srNo: '28',
+                        rackNo: '3',
+                        location: 'Nazira_IDC',
+                        serverIPPhysical: '10.205.181.229',
+                        serverHostnamePhysical: 'NAZROC01SR012 / NAZROC01SR025',
+                        os: 'Vmware ESXi 7.0.3',
+                        serverSerialNo: '85LDHJ2',
+                        idracILO: '10.205.181.237',
+                        make: 'Dell',
+                        model: 'PowerEdge R630',
+                        ram: '64 GB',
+                        storage: '7TB',
+                        processors: 'INTEL(R) XENON(R) CPU E5-2620 V4@2.10 GHz @2.10 GHz (2 Processors) ',
+                        serverVMIP: '',
+                        serverVMHostname: '',
+                        serverVMOS: '',
+                        vmApplicationDetails: '',
+                        managedBy: 'Security Team, Delhi',
+                        maintenancedBy: 'NOT IN CIPL MAINTENANCE',
+                        deviceLocation: 'IDC, SERVER RACK 3',
+                        remarks: ''
+                    },
+                    {
+                        srNo: '29',
+                        rackNo: '3',
+                        location: 'Nazira_IDC',
+                        serverIPPhysical: '10.205.181.227',
+                        serverHostnamePhysical: 'NAZROC01SR013',
+                        os: 'Vmware ESXi 7.0.3',
+                        serverSerialNo: '85GBHJ2',
+                        idracILO: '10.205.181.238',
+                        make: 'Dell',
+                        model: 'PowerEdge R630',
+                        ram: '64 GB',
+                        storage: '7TB',
+                        processors: 'INTEL(R) XENON(R) CPU E5-2620 V4@2.10 GHz @2.10 GHz (2 Processors) ',
+                        serverVMIP: '',
+                        serverVMHostname: '',
+                        serverVMOS: '',
+                        vmApplicationDetails: '',
+                        managedBy: 'Security Team, Delhi',
+                        maintenancedBy: 'NOT IN CIPL MAINTENANCE',
+                        deviceLocation: 'IDC, SERVER RACK 3',
+                        remarks: ''
+                    }
+                ]
+            }
+
+            // Add more applications with their server arrays here
+        };
+
+        function displayApplicationServers() {
+            // Get the application ID from the URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const appId = urlParams.get('server');
+            
+            const container = document.getElementById('serverDetailsBody');
+            container.innerHTML = ''; // Clear existing content
+            
+            // Check if we have data for this application
+            if (appId && applicationData[appId]) {
+                const appInfo = applicationData[appId];
+                
+                // Add application header
+                const appHeader = document.createElement('div');
+                appHeader.innerHTML = `
+                    <h2 style="color: #00bcd4; margin-bottom: 30px; text-align: center;">
+                        ${appInfo.name}
+                    </h2>
+                `;
+                container.appendChild(appHeader);
+
+                // Display all servers for this application
+                appInfo.servers.forEach((serverData, index) => {
+                    const serverTable = document.createElement('table');
+                    serverTable.innerHTML = `
+                        <tr class="server-header">
+                            <td colspan="2"><strong>${serverData.serverHostnamePhysical}</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Sr.No</td>
+                            <td>${serverData.srNo}</td>
+                        </tr>
+                        <tr>
+                            <td>Rack No</td>
+                            <td>${serverData.rackNo}</td>
+                        </tr>
+                        <tr>
+                            <td>Location</td>
+                            <td>${serverData.location}</td>
+                        </tr>
+                        <tr>
+                            <td>Server IP (Physical)</td>
+                            <td>${serverData.serverIPPhysical}</td>
+                        </tr>
+                        <tr>
+                            <td>Server Hostname (Physical)</td>
+                            <td>${serverData.serverHostnamePhysical}</td>
+                        </tr>
+                        <tr>
+                            <td>OS</td>
+                            <td>${serverData.os}</td>
+                        </tr>
+                        <tr>
+                            <td>Server Serial No.</td>
+                            <td>${serverData.serverSerialNo}</td>
+                        </tr>
+                        <tr>
+                            <td>IDRac/ILO</td>
+                            <td>${serverData.idracILO}</td>
+                        </tr>
+                        <tr>
+                            <td>Make</td>
+                            <td>${serverData.make}</td>
+                        </tr>
+                        <tr>
+                            <td>Model</td>
+                            <td>${serverData.model}</td>
+                        </tr>
+                        <tr>
+                            <td>RAM</td>
+                            <td>${serverData.ram}</td>
+                        </tr>
+                        <tr>
+                            <td>Storage</td>
+                            <td>${serverData.storage}</td>
+                        </tr>
+                        <tr>
+                            <td>Processors</td>
+                            <td>${serverData.processors}</td>
+                        </tr>
+                        <tr>
+                            <td>Server VM IP</td>
+                            <td>${serverData.serverVMIP}</td>
+                        </tr>
+                        <tr>
+                            <td>Server VM Hostname</td>
+                            <td>${serverData.serverVMHostname}</td>
+                        </tr>
+                        <tr>
+                            <td>Server VM OS</td>
+                            <td>${serverData.serverVMOS}</td>
+                        </tr>
+                        <tr>
+                            <td>VM Application Details</td>
+                            <td>${serverData.vmApplicationDetails}</td>
+                        </tr>
+                        <tr>
+                            <td>Managed By</td>
+                            <td>${serverData.managedBy}</td>
+                        </tr>
+                        <tr>
+                            <td>Maintenanced By</td>
+                            <td>${serverData.maintenancedBy}</td>
+                        </tr>
+                        <tr>
+                            <td>Device Location</td>
+                            <td>${serverData.deviceLocation}</td>
+                        </tr>
+                        <tr>
+                            <td>Remarks</td>
+                            <td>${serverData.remarks}</td>
+                        </tr>
+                    `;
+                    container.appendChild(serverTable);
+
+                    // Add separator between servers (except for the last one)
+                    if (index < appInfo.servers.length - 1) {
+                        const separator = document.createElement('div');
+                        separator.style.height = '40px';
+                        container.appendChild(separator);
+                    }
+                });
+            } else {
+                // Display error message if application not found
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 20px; color: #ff6b6b;">
+                        <h2>Application Not Found</h2>
+                        <p>The requested application information is not available.</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Add some additional styles
+        const style = document.createElement('style');
+        style.textContent = `
+            .server-header td {
+                background-color: #00bcd4;
+                color: white;
+                font-size: 1.1em;
+                padding: 15px;
+            }
+            td:first-child {
+                font-weight: bold;
+                width: 200px;
+                background-color: #1e2329;
+            }
+            td:last-child {
+                width: calc(100% - 200px);
+            }
+            table {
+                margin-bottom: 20px;
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Display the application servers when the page loads
+        displayApplicationServers();
+    </script>
+</body>
+</html> 
