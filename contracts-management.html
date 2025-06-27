@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contracts Management</title>
+    <link rel="stylesheet" href="contract.css">
+</head>
+<body>
+    <header>
+        <a href="DEVELOPED.html" class="back-btn">← Back to Portal</a>
+        <div class="header-content">
+            <img src="icons/contract.svg" alt="Contracts Icon" class="header-icon">
+            <h1>Contracts Management</h1>
+        </div>
+        <hr>
+    </header>
+    <div class="container">
+        <section class="card">
+            <h2>Add New Contract</h2>
+            <form id="contractForm">
+                <div class="form-row">
+                    <input type="text" name="vendorName" placeholder="Vendor Name" required>
+                    <input type="text" name="gemContract" placeholder="GeM Contract" required>
+                </div>
+                <div class="form-row">
+                    <input type="text" name="regularContract" placeholder="Regular Contract" required>
+                    <input type="text" name="period" placeholder="Period" required>
+                </div>
+                <div class="form-row">
+                    <input type="text" name="value" placeholder="Value" required>
+                    <input type="text" name="nomination" placeholder="Nomination" required>
+                </div>
+                <div class="form-row">
+                    <input type="text" name="regular" placeholder="Regular" required>
+                    <input type="text" name="subject" placeholder="Subject" required>
+                </div>
+                <div class="form-row">
+                    <input type="text" name="oemOes" placeholder="OEM/OES" required>
+                    <input type="text" name="remarks" placeholder="Remarks">
+                </div>
+                <button type="submit">Add Contract</button>
+            </form>
+        </section>
+        <section class="card">
+            <h2>Contracts List</h2>
+            <div style="margin-bottom: 16px; display: flex; justify-content: flex-end;">
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Search contracts..."
+                    style="padding: 8px 12px; border-radius: 6px; border: 1px solid #3a4a5d; background: #1a222b; color: #fff; width: 240px;"
+                >
+            </div>
+            <table id="contractsTable">
+                <thead>
+                    <tr>
+                        <th>SI No</th>
+                        <th>Vendor Name</th>
+                        <th>GeM Contract</th>
+                        <th>Regular Contract</th>
+                        <th>Period</th>
+                        <th>Value</th>
+                        <th>Nomination</th>
+                        <th>Regular</th>
+                        <th>Subject</th>
+                        <th>OEM/OES</th>
+                        <th>Remarks</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                </tbody>
+            </table>
+        </section>
+    </div>
+    <script>
+        let allContracts = [];
+        let editingId = null;
+        let filteredContracts = [];
+
+        function renderContracts(contracts) {
+            const tbody = document.querySelector('#contractsTable tbody');
+            tbody.innerHTML = '';
+            contracts.forEach((contract, idx) => {
+                const row = `<tr>
+                    <td>${idx + 1}</td>
+                    <td>${contract.vendorName}</td>
+                    <td>${contract.gemContract}</td>
+                    <td>${contract.regularContract}</td>
+                    <td>${contract.period}</td>
+                    <td>${contract.value}</td>
+                    <td>${contract.nomination}</td>
+                    <td>${contract.regular}</td>
+                    <td>${contract.subject}</td>
+                    <td>${contract.oemOes}</td>
+                    <td>${contract.remarks || ''}</td>
+                    <td>
+                      <div class="action-btns">
+                        <button class="contracts-actions-btn" onclick="editContract(${contract.id})">Edit</button>
+                        <button class="contracts-actions-btn delete" onclick="deleteContract(${contract.id})">Delete</button>
+                      </div>
+                    </td>
+                </tr>`;
+                tbody.innerHTML += row;
+            });
+        }
+
+        function loadContracts() {
+            fetch('http://localhost:5000/contracts')
+                .then(res => res.json())
+                .then(data => {
+                    allContracts = data;
+                    filteredContracts = allContracts;
+                    renderContracts(filteredContracts);
+                });
+        }
+
+        // Search functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.addEventListener('input', function() {
+                    const query = this.value.trim().toLowerCase();
+                    filteredContracts = allContracts.filter(contract =>
+                        Object.values(contract).some(val =>
+                            (val ? val.toString().toLowerCase() : '').includes(query)
+                        )
+                    );
+                    renderContracts(filteredContracts);
+                });
+            }
+        });
+
+        document.getElementById('contractForm').onsubmit = function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const contract = {
+                vendorName: formData.get('vendorName'),
+                gemContract: formData.get('gemContract'),
+                regularContract: formData.get('regularContract'),
+                period: formData.get('period'),
+                value: formData.get('value'),
+                nomination: formData.get('nomination'),
+                regular: formData.get('regular'),
+                subject: formData.get('subject'),
+                oemOes: formData.get('oemOes'),
+                remarks: formData.get('remarks')
+            };
+            if (editingId) {
+                fetch(`http://localhost:5000/contracts/${editingId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(contract)
+                }).then(() => {
+                    this.reset();
+                    editingId = null;
+                    this.querySelector('button[type="submit"]').textContent = "Add Contract";
+                    loadContracts();
+                });
+            } else {
+                fetch('http://localhost:5000/contracts', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(contract)
+                }).then(() => {
+                    this.reset();
+                    loadContracts();
+                });
+            }
+        };
+
+        function editContract(id) {
+            const contract = allContracts.find(c => c.id === id);
+            if (!contract) return;
+            editingId = id;
+            const form = document.getElementById('contractForm');
+            form.vendorName.value = contract.vendorName;
+            form.gemContract.value = contract.gemContract;
+            form.regularContract.value = contract.regularContract;
+            form.period.value = contract.period;
+            form.value.value = contract.value;
+            form.nomination.value = contract.nomination;
+            form.regular.value = contract.regular;
+            form.subject.value = contract.subject;
+            form.oemOes.value = contract.oemOes;
+            form.remarks.value = contract.remarks || '';
+            form.querySelector('button[type="submit"]').textContent = "Update Contract";
+        }
+
+        function deleteContract(id) {
+            if (!confirm("Are you sure you want to delete this contract?")) return;
+            fetch(`http://localhost:5000/contracts/${id}`, {
+                method: 'DELETE'
+            }).then(() => loadContracts());
+        }
+
+        // Initial load
+        loadContracts();
+    </script>
+</body>
+</html>
