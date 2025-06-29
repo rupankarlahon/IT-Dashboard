@@ -6,6 +6,19 @@ Project Objectives
 •	Enhance Visibility: Offer real-time insights into IT inventory, contract status, and server health.
 •	Support Compliance: Help maintain standards and compliance (e.g., ISO 27000).
 •	Scalability: Modular design allows easy addition of new IT management modules.
+# System Architecture
+A. Frontend
+•	HTML5: Semantic markup for all pages (e.g., asset-management.html, contracts-management.html, server-management.html, DEVELOPED.html).
+•	CSS3: Custom stylesheets (assetstyle.css, contract.css, serverstyle.css, style.css) for a modern, dark-themed, responsive UI.
+•	JavaScript (Vanilla): Handles dynamic rendering, form submissions, and API communication.
+B. Backend
+•	Node.js: JavaScript runtime for server-side logic.
+•	Express.js: RESTful API framework.
+•	Sequelize ORM: Object-Relational Mapping for MySQL database operations.
+•	CORS: Middleware for cross-origin requests.
+C. Database
+•	MySQL: Relational database for storing all IT data.
+•	Sequelize Models: Define schema and validation for each entity (Asset, Contract, Server, etc.).
 # How to Use the Portal
 1.	Start the Backend
 o	Run npm install and npm start in the backend folder.
