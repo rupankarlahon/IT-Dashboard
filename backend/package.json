@@ -11,5 +11,9 @@
     "express": "^4.21.2",
     "mysql2": "^3.14.1",
     "sequelize": "^6.37.7"
-  }
+  },
+  "description": "",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }

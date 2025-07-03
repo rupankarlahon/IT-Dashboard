@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Engineers</title>
+    <link rel="stylesheet" href="service.css">
+</head>
+<body>
+    <div id="wrapper">
+
+        <header>
+            <a href="DEVELOPED.html" class="back-btn">← Back to Portal</a>
+            <div class="header-content">
+                <img src="icons/contract.svg" alt="Service Icon" class="header-icon">
+                <h1>Service Engineers</h1>
+            </div>
+            <hr>
+        </header>
+        <div class="container">
+        <section class="card">
+            <h2>Add New Engineer</h2>
+            <form id="serviceForm">
+                <div class="form-row">
+                    <input type="text" name="serviceID" placeholder="Service ID" required>
+                    <input type="text" name="serviceName" placeholder=" Service Name" required>
+                </div>
+                <div class="form-row">
+                    <input type="text" name="engineerName" placeholder=" Engineer Name" required>
+                    <input type="number" name="contact" placeholder="Contact Number" required>
+                </div>
+                <div class="form-row">
+                    <input type="email" name="email" placeholder="Email" required>
+                    <input name="entry" type="datetime-local" id="">
+                </div>
+                <div class="form-row">
+                    <textarea name="desc" placeholder="Description about service and departement" id=""></textarea>
+                </div>
+                <button type="submit">Add Engineer<node src/app.js/button>
+            </form>
+        </section>
+        <section class="card">
+            <h2>Engineers List</h2>
+            <div style="margin-bottom: 16px; display: flex; justify-content: flex-end;">
+                <input
+                type="text"
+                id="searchInput"
+                placeholder="Search engineers..."
+                style="padding: 8px 12px; border-radius: 6px; border: 1px solid #3a4a5d; background: #1a222b; color: #fff; width: 240px;"
+                >
+            </div>
+            <table id="servicesTable">
+                <thead>
+                    <tr>
+                        <th>Service ID</th>
+                        <th>Service Name</th>
+                        <th>Engineer Name</th>
+                        <th>Contact</th>
+                        <th>Email</th>
+                        <th>Entry</th>
+                        <th>Description</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                </tbody>
+            </table>
+        </section>
+    </div>
+    <script>
+        let allServices = [];
+        let editingId = null;
+        let filteredServices = [];
+        
+        function renderServices(services) {
+            const tbody = document.querySelector('#servicesTable tbody');
+            tbody.innerHTML = '';
+            services.forEach((service, idx) => {
+                const row = `<tr>
+                    <td>${service.serviceID}</td>
+                    <td>${service.serviceName}</td>
+                    <td>${service.engineerName}</td>
+                    <td>${service.contact}</td>
+                    <td>${service.email}</td>
+                    <td>${service.entry}</td>
+                    <td>${service.desc}</td>
+                    <td>
+                        <div class="action-btns">
+                            <button class="services-actions-btn" onclick="editService(${service.id})">Edit</button>
+                            <button class="services-actions-btn delete" onclick="deleteService(${service.id})">Delete</button>
+                        </div>
+                    </td>
+                </tr>`;
+                tbody.innerHTML += row;
+            });
+        }
+                    
+                    function loadServices() {
+            fetch('http://localhost:5000/services')
+            .then(res => res.json())
+                .then(data => {
+                    allServices = data;
+                    filteredServices = allServices;
+                    renderServices(filteredServices);
+                });
+            }
+
+        // Search functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.addEventListener('input', function() {
+                    const query = this.value.trim().toLowerCase();
+                    filteredServices = allServices.filter(service =>
+                        Object.values(service).some(val =>
+                            (val ? val.toString().toLowerCase() : '').includes(query)
+                        )
+                    );
+                    renderServices(filteredServices);
+                });
+            }
+        });
+
+        document.getElementById('serviceForm').onsubmit = function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const service = {
+                serviceID: formData.get('serviceID'),
+                serviceName: formData.get('serviceName'),
+                engineerName: formData.get('engineerName'),
+                contact: formData.get('contact'),
+                email: formData.get('email'),
+                entry: formData.get('entry'),
+                desc: formData.get('desc'),
+            };
+            if (editingId) {
+                fetch(`http://localhost:5000/services/${editingId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(service)
+                }).then(() => {
+                    this.reset();
+                    editingId = null;
+                    this.querySelector('button[type="submit"]').textContent = "Add Engineer";
+                    loadServices();
+                });
+            } else {
+                fetch('http://localhost:5000/services', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(service)
+                }).then(() => {
+                    this.reset();
+                    loadServices();
+                });
+            }
+        };
+        
+        
+        function editService(id) {
+            const service = allServices.find(c => c.id === id);
+            if (!service) return;
+            editingId = id;
+            const form = document.getElementById('serviceForm');
+        
+            form.serviceID.value = service.serviceID;
+            form.serviceName.value = service.serviceName;
+            form.engineerName.value = service.engineerName;
+            form.contact.value = service.contact;
+            form.email.value = service.email;
+            form.entry.value = service.entry;
+            form.desc.value = service.desc;
+        
+            form.querySelector('button[type="submit"]').textContent = "Update Info";
+        }
+        
+        function deleteService(id) {
+            if (!confirm("Are you sure you want to delete this service?")) return;
+            fetch(`http://localhost:5000/services/${id}`, {
+                method: 'DELETE'
+            }).then(() => loadServices());
+        }
+        
+        // Initial load
+        loadServices();
+        </script>
+</div>
+</body>
+</html>
