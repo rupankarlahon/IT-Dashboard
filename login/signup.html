@@ -1,41 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up</title>
-    <link href="src/output.css" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sign Up</title>
+  <link href="src/output.css" rel="stylesheet">
 </head>
 <body class="bg-white flex min-h-screen justify-center items-center">
-<div id="card" class="bg-slate-900 p-8 pb-20 rounded-lg shadow-4xl max-w-sm w-full hover:-translate-y-1 hover:scale-110/4 transition  delay-200 duration-300 ease-in-out">
+  <div id="card" class="bg-slate-900 p-8 pb-10 rounded-lg shadow-4xl max-w-sm w-full hover:-translate-y-1 hover:scale-110/4 transition delay-200 duration-300 ease-in-out">
+    
     <!-- logo -->
     <div class="flex justify-center mb-5">
-        <img src="ONGC_Logo.svg.png" alt="" class="h-20 rounded-lg" >
+      <img src="ONGC_Logo.svg.png" alt="" class="h-20 rounded-lg">
     </div>
-    
+
     <h2 class="text-3xl text-white text-center font-bold mb-4">Sign Up</h2>
-    
-    <div class="mb-4">
-        <label class="text-white block text-sm text-medium mb-2">Email</label>
-        <input class="w-full text-white px-2 py-2 bg-gray-700 rounded-md hover:outlone-none hover:ring-2 hover:ring-blue-500 " type="email" placeholder="Enter Your Email">
-    </div>
-    
-    <div class="mb-4">
-        <label class="text-white block text-sm text-medium mb-2">Password</label>
-        <input class="w-full text-white px-2 py-2 bg-gray-700 rounded-md hover:outlone-none hover:ring-2 hover:ring-blue-500" type="password" placeholder="Enter Password">
-    </div>
-    <div class="mb-10">
-        <label class="text-white block text-sm text-medium mb-2">Confirm Password</label>
-        <input class="w-full text-white px-2 py-2 bg-gray-700 rounded-md hover:outlone-none hover:ring-2 hover:ring-blue-500" type="password">
-    </div>
-    <a href="login.html">
-        <button type="submit" class="bg-amber-600 w-full rounded-md text-white py-2 hover:bg-orange-700 text-sm font-bo">Sign Up</button>
-    </a>
+
+    <form id="signupForm">
+      <div class="mb-4">
+        <input name="name" type="text" placeholder="Full Name" required class="w-full text-white px-2 py-2 bg-gray-700 rounded-md hover:ring-2 hover:ring-blue-500" />
+      </div>
+
+      <div class="mb-4">
+        <input name="role" type="text" placeholder="Role (e.g., Admin/User)" required class="w-full text-white px-2 py-2 bg-gray-700 rounded-md hover:ring-2 hover:ring-blue-500" />
+      </div>
+
+      <div class="mb-4">
+        <input name="email" type="email" placeholder="Email" required class="w-full text-white px-2 py-2 bg-gray-700 rounded-md hover:ring-2 hover:ring-blue-500" />
+      </div>
+
+      <div class="mb-4">
+        <input name="cpf" type="number" placeholder="CPF (5-digit)" required class="w-full text-white px-2 py-2 bg-gray-700 rounded-md hover:ring-2 hover:ring-blue-500" />
+      </div>
+
+      <div class="mb-4">
+        <input name="password" type="password" placeholder="Password" required class="w-full text-white px-2 py-2 bg-gray-700 rounded-md hover:ring-2 hover:ring-blue-500" />
+      </div>
+
+      <div class="mb-10">
+        <input name="confirmPassword" type="password" placeholder="Confirm Password" required class="w-full text-white px-2 py-2 bg-gray-700 rounded-md hover:ring-2 hover:ring-blue-500" />
+      </div>
+
+      <div>
+        <button type="submit" class="bg-amber-600 w-full rounded-md text-white py-2 hover:bg-orange-700 text-sm font-bold">Sign Up</button>
+      </div>
+    </form>
 
     <div class="text-center mt-4">
-        <span class="text-white text-sm">Already a User?</span>
-        <a href="login.html" class="text-blue-500 text-sm text-center mt-4">Login</a>
+      <span class="text-white text-sm">Already a User?</span>
+      <a href="login.html" class="text-blue-500 text-sm">Login</a>
     </div>
-</div>
+  </div>
+
+  <script>
+   document.getElementById('signupForm').onsubmit = async (e) => {
+  e.preventDefault();
+
+  const name = e.target.name.value.trim();
+  const role = e.target.role.value.trim();
+  const email = e.target.email.value.trim();
+  const cpf = e.target.cpf.value.trim();
+  const password = e.target.password.value;
+  const confirmPassword = e.target.confirmPassword.value;
+
+  if (password !== confirmPassword) {
+    alert('Passwords do not match!');
+    return;
+  }
+
+  const res = await fetch('http://localhost:5000/auth/signup', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, role, email, cpf, password })
+  });
+
+  const data = await res.json();
+
+  if (res.ok) {
+    alert('Signup successful! Redirecting to login...');
+    window.location.href = 'login.html';
+  } else {
+    alert(data.error || 'Signup failed.');
+  }
+};
+  </script>
 </body>
 </html>

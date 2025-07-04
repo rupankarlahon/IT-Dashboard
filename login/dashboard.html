@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard</title>
+  <link href="src/output.css" rel="stylesheet">
+</head>
+<body class="bg-gray-900 min-h-screen flex flex-col items-center justify-center">
+  <div id="card" class="bg-slate-800 shadow-lg rounded-lg p-8 m-8 w-full max-w-sm">
+
+    <!-- Greeting -->
+    <h2 class="text-2xl font-bold mb-4 text-center text-white" id="greeting">Welcome!</h2>
+
+    <!-- Get Started Section -->
+    <div class="mb-10 text-white">
+      <h3 class="text-lg font-semibold mb-2 text-center">You’re logged in.</h3>
+      <p class="text-gray-700 text-center">Use the options below to manage your account.</p>
+    </div>
+
+    <!-- Change Password Form -->
+    <div class="mb-6">
+      <h3 class="text-lg font-semibold mb-2 text-white">Change Password</h3>
+      <form id="changePasswordForm" class="space-y-3 ">
+        <input type="password" placeholder="Current Password" name="currentPassword" required class="text-white w-full text-sm px-3 py-2 border border-gray-300 rounded-md">
+        <input type="password" placeholder="New Password" name="newPassword" required class="text-white w-full px-3 py-2 border text-sm border-gray-300 rounded-md mt-4">
+        <button type="submit" class="w-full py-2 rounded-md  mt-4 text-black"style="background-color: white;">Update Password</button>
+      </form>
+    </div>
+
+    <!-- Logout Button -->
+    <button onclick="logout()" class=" text-white w-full py-2 rounded-md bg-amber-500 hover:bg-amber-700">Logout</button>
+    <div class="mt-4 text-black">
+      <a href="../DEVELOPED.html">
+        <button class="w-full py-2 rounded-md mb-4 text-white" style="background-color: #1F51FF;">Get Started</button>
+      </a>
+    </div>
+  </div>
+
+  <script>
+    const token = localStorage.getItem('token');
+if (!token) window.location.href = 'login.html';
+
+// Get user details
+fetch('http://localhost:5000/auth/me', {
+  headers: { Authorization: `Bearer ${token}` }
+})
+.then(res => res.json())
+.then(data => {
+  document.getElementById('greeting').innerText = `Welcome, ${data.name}! Role: ${data.role}`;
+})
+.catch(() => {
+  alert('Session expired. Please log in again.');
+  localStorage.removeItem('token');
+  window.location.href = 'login.html';
+});
+
+// Change Password
+document.getElementById('changePasswordForm').onsubmit = async (e) => {
+  e.preventDefault();
+  const currentPassword = e.target.currentPassword.value;
+  const newPassword = e.target.newPassword.value;
+
+  const res = await fetch('http://localhost:5000/auth/change-password', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    },
+    body: JSON.stringify({ currentPassword, newPassword })
+  });
+
+  const result = await res.json();
+  alert(result.message || result.error);
+};
+
+// Logout
+function logout() {
+  localStorage.removeItem('token');
+  window.location.href = 'login.html';
+}
+  </script>
+</body>
+</html>
